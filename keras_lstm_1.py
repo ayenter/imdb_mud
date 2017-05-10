@@ -10,6 +10,7 @@ import numpy
 import matplotlib
 import argparse
 import os
+import keras
 from keras.datasets import imdb
 from keras.models import Sequential
 from keras.layers import Dense
@@ -22,14 +23,13 @@ from keras.preprocessing import sequence
 
 # -+-+-+-+-+-+-+- CALLBACK -+-+-+-+-+-+-+-
 
-class BatchScores(Callback):
-    def __init__(self, batch_scores):
-        self.batch_scores = batch_scores
-    def on_batch_end(self, epoch, logs={}):
-        batch_scores = self.batch_scores
-        if batch_scores.has_key(epoch) == False:
-        	batch_scores.update({epoch:[]})
-        batch_scores[epoch].append(self.params['metrics'])
+class BatchHistory(keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.acc = []
+        self.loss = []
+    def on_batch_end(self, batch, logs={}):
+        self.acc.append(logs.get('acc'))
+        self.loss.append(logs.get('loss'))
 
 
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
@@ -40,12 +40,19 @@ def print_time(start, end):
 	print("{:0>2}h {:0>2}m {:05.2f}s ".format(int(hours),int(minutes),seconds))
 
 def plot_epochs(history):
-	x = range(1,len(history['acc'])+1)
+	epochs = len(history['acc'])
+	total_batches = len(batch_acc)
+	batches = total_batches/epochs
+	x = np.arange(1,epochs+1)
+	batch_x = np.arange(1,total_batches+1)/float(batches)
 	fig, ax1 = plt.subplots()
 	ax2 = ax1.twinx()
 
+	ax1.plot(batch_x, history['batch_acc'], 'g:')
 	ax1.plot(x, history['acc'], 'g--')
 	ax1.plot(x, history['val_acc'], 'g-')
+
+	ax2.plot(batch_x, history['batch_loss'], 'r:')
 	ax2.plot(x, history['loss'], 'r--')
 	ax2.plot(x, history['val_loss'], 'r-')
 
@@ -95,12 +102,14 @@ print(model.summary())
 
 # -+-+-+-+-+-+-+- TRAINING MODEL -+-+-+-+-+-+-+-
 
-batch_scores = []
+batch_hist = BatchHistory()
 start_time = time.time()
-hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[BatchScores((X_test, Y_test, batch_scores))])
+hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[batch_hist])
 end_time = time.time()
 print_time(start_time, end_time)
-print batch_scores
+full_hist = hist
+full_hist.update({'batch_loss':batch_hist.loss})
+full_hist.update({'batch_acc':batch_hist.acc})
 
 
 # -+-+-+-+-+-+-+- EVALUATION AND PLOTTING -+-+-+-+-+-+-+-
@@ -114,4 +123,4 @@ if inputs.ssh:
 	matplotlib.use('GTK')
 import matplotlib.pyplot as plt
 
-plot_epochs(hist.history)
+plot_epochs(full_hist)
