@@ -25,7 +25,6 @@ from keras.preprocessing import sequence
 class BatchScores(Callback):
     def __init__(self, batch_scores):
         self.batch_scores = batch_scores
-
     def on_batch_end(self, epoch, logs={}):
         batch_scores = self.batch_scores
         if batch_scores.has_key(epoch) == False:
@@ -101,6 +100,7 @@ start_time = time.time()
 hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[BatchScores((X_test, Y_test, batch_scores))])
 end_time = time.time()
 print_time(start_time, end_time)
+print batch_scores
 
 
 # -+-+-+-+-+-+-+- EVALUATION AND PLOTTING -+-+-+-+-+-+-+-
