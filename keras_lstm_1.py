@@ -112,8 +112,8 @@ hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), valid
 end_time = time.time()
 print_time(start_time, end_time)
 batch_history = {}
-batch_history.update({'loss':batch_hist.loss})
-batch_history.update({'acc':batch_hist.acc})
+batch_history.update({'loss':np.asarray(batch_hist.loss)[::10]})
+batch_history.update({'acc':np.asarray(batch_hist.acc)[::10]})
 print("")
 
 
