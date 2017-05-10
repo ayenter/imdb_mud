@@ -49,12 +49,12 @@ def plot_epochs(history, batch_history):
 	ax2 = ax1.twinx()
 
 	ax1.plot(batch_x, batch_history['acc'], 'g:')
-	ax1.plot(x, history['acc'], 'g--')
-	ax1.plot(x, history['val_acc'], 'g-')
+	ax1.plot(x, history['acc'], 'g--', marker='o')
+	ax1.plot(x, history['val_acc'], 'g-', marker='o')
 
 	ax2.plot(batch_x, batch_history['loss'], 'r:')
-	ax2.plot(x, history['loss'], 'r--')
-	ax2.plot(x, history['val_loss'], 'r-')
+	ax2.plot(x, history['loss'], 'r--', marker='o')
+	ax2.plot(x, history['val_loss'], 'r-', marker='o')
 
 	ax1.set_xlabel('Epochs')
 	ax1.set_ylabel('Accuracy', color='g')
