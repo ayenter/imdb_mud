@@ -6,7 +6,7 @@
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
 
 import time
-import numpy
+import numpy as np
 import matplotlib
 import argparse
 import os
@@ -76,7 +76,7 @@ inputs = parser.parse_args()
 
 print("PREPROCESSING DATA")
 # fix random seed for reproducibility
-numpy.random.seed(7)
+np.random.seed(7)
 # load the dataset but only keep the top n words, zero the rest
 top_words = 5000
 (X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=top_words)
@@ -108,7 +108,7 @@ print("")
 print("TRAINING MODEL")
 batch_hist = BatchHistory()
 start_time = time.time()
-hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[batch_hist])
+hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[batch_hist])
 end_time = time.time()
 print_time(start_time, end_time)
 batch_history = {}
