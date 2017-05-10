@@ -20,6 +20,19 @@ from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
 
 
+# -+-+-+-+-+-+-+- CALLBACK -+-+-+-+-+-+-+-
+
+class BatchScores(Callback):
+    def __init__(self, batch_scores):
+        self.batch_scores = batch_scores
+
+    def on_batch_end(self, epoch, logs={}):
+        batch_scores = self.batch_scores
+        if batch_scores.has_key(epoch) == False:
+        	batch_scores.update({epoch:[]})
+        batch_scores[epoch].append(self.params['metrics'])
+
+
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
 
 def print_time(start, end):
@@ -28,7 +41,6 @@ def print_time(start, end):
 	print("{:0>2}h {:0>2}m {:05.2f}s ".format(int(hours),int(minutes),seconds))
 
 def plot_epochs(history):
-	plt.margins(.05,.1)
 	x = range(1,len(history['acc'])+1)
 	fig, ax1 = plt.subplots()
 	ax2 = ax1.twinx()
@@ -42,6 +54,7 @@ def plot_epochs(history):
 	ax1.set_ylabel('Accuracy', color='g')
 	ax2.set_ylabel('Loss', color='r')
 
+	plt.margins(.05,.1)
 	plt.show()
 
 
@@ -55,6 +68,7 @@ inputs = parser.parse_args()
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
 
+print("PREPROCESSING DATA")
 # fix random seed for reproducibility
 numpy.random.seed(7)
 # load the dataset but only keep the top n words, zero the rest
@@ -82,11 +96,11 @@ print(model.summary())
 
 # -+-+-+-+-+-+-+- TRAINING MODEL -+-+-+-+-+-+-+-
 
+batch_scores = []
 start_time = time.time()
-hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64)
+hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[BatchScores((X_test, Y_test, batch_scores))])
 end_time = time.time()
 print_time(start_time, end_time)
-print("")
 
 
 # -+-+-+-+-+-+-+- EVALUATION AND PLOTTING -+-+-+-+-+-+-+-
