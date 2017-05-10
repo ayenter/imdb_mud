@@ -39,20 +39,20 @@ def print_time(start, end):
 	minutes, seconds = divmod(rem, 60)
 	print("{:0>2}h {:0>2}m {:05.2f}s ".format(int(hours),int(minutes),seconds))
 
-def plot_epochs(history):
+def plot_epochs(history, batch_history):
 	epochs = len(history['acc'])
-	total_batches = len(batch_acc)
+	total_batches = len(batch_history['acc'])
 	batches = total_batches/epochs
 	x = np.arange(1,epochs+1)
 	batch_x = np.arange(1,total_batches+1)/float(batches)
 	fig, ax1 = plt.subplots()
 	ax2 = ax1.twinx()
 
-	ax1.plot(batch_x, history['batch_acc'], 'g:')
+	ax1.plot(batch_x, batch_history['acc'], 'g:')
 	ax1.plot(x, history['acc'], 'g--')
 	ax1.plot(x, history['val_acc'], 'g-')
 
-	ax2.plot(batch_x, history['batch_loss'], 'r:')
+	ax2.plot(batch_x, batch_history['loss'], 'r:')
 	ax2.plot(x, history['loss'], 'r--')
 	ax2.plot(x, history['val_loss'], 'r-')
 
@@ -84,10 +84,12 @@ top_words = 5000
 max_review_length = 500
 X_train = sequence.pad_sequences(X_train, maxlen=max_review_length)
 X_test = sequence.pad_sequences(X_test, maxlen=max_review_length)
+print("")
 
 
 # -+-+-+-+-+-+-+- BUILDING MODEL -+-+-+-+-+-+-+-
 
+print("BUILDING MODEL")
 # create the model
 embedding_vecor_length = 32
 model = Sequential()
@@ -98,22 +100,26 @@ model.add(LSTM(100))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 print(model.summary())
+print("")
 
 
 # -+-+-+-+-+-+-+- TRAINING MODEL -+-+-+-+-+-+-+-
 
+print("TRAINING MODEL")
 batch_hist = BatchHistory()
 start_time = time.time()
 hist = model.fit(numpy.vstack((X_train,X_test)), numpy.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[batch_hist])
 end_time = time.time()
 print_time(start_time, end_time)
-full_hist = hist
-full_hist.update({'batch_loss':batch_hist.loss})
-full_hist.update({'batch_acc':batch_hist.acc})
+batch_history = {}
+batch_history.update({'loss':batch_hist.loss})
+batch_history.update({'acc':batch_hist.acc})
+print("")
 
 
 # -+-+-+-+-+-+-+- EVALUATION AND PLOTTING -+-+-+-+-+-+-+-
 
+print("EVALUATION AND PLOTTING")
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test, verbose=0)
 print("Accuracy: %.2f%%" % (scores[1]*100))
@@ -123,4 +129,4 @@ if inputs.ssh:
 	matplotlib.use('GTK')
 import matplotlib.pyplot as plt
 
-plot_epochs(full_hist)
+plot_epochs(hist.history, batch_history)
