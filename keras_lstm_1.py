@@ -91,6 +91,7 @@ print("")
 # -+-+-+-+-+-+-+- BUILDING MODEL -+-+-+-+-+-+-+-
 
 print("BUILDING MODEL")
+embedding_vecor_length = 32
 
 branch_3 = Sequential()
 branch_3.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
