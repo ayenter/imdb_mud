@@ -93,19 +93,24 @@ print("")
 print("BUILDING MODEL")
 embedding_vecor_length = 32
 
+input_layer = Input()
+
 branch_3 = Sequential()
+branch_3.add(input_layer)
 branch_3.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
 branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 branch_3.add(MaxPooling1D(pool_size=2))
 branch_3.add(LSTM(100))
 
 branch_4 = Sequential()
+branch_4.add(input_layer)
 branch_4.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
 branch_4.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 branch_4.add(MaxPooling1D(pool_size=2))
 branch_4.add(LSTM(100))
 
 branch_5 = Sequential()
+branch_5.add(input_layer)
 branch_5.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
 branch_5.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 branch_5.add(MaxPooling1D(pool_size=2))
