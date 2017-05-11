@@ -69,7 +69,7 @@ def plot_epochs(history, batch_history):
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 parser = argparse.ArgumentParser(description='Sentiment LSTM running through Keras on IMDb movie reviews')
 parser.add_argument('--ssh', dest="ssh", action="store_true", default=False, help="Change matplotlib back-end for ssh")
-parser.add_argument('num_epochs', dest="num_epochs", action="store", default=3, help="Number of Epochs", type=int)
+parser.add_argument('num_epochs', action="store", default=3, help="Number of Epochs", type=int)
 inputs = parser.parse_args()
 
 
@@ -109,7 +109,7 @@ print("")
 print("TRAINING MODEL")
 batch_hist = BatchHistory()
 start_time = time.time()
-hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=3, batch_size=64, callbacks=[batch_hist])
+hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=64, callbacks=[batch_hist])
 end_time = time.time()
 print_time(start_time, end_time)
 batch_history = {}
