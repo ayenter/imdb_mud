@@ -45,7 +45,7 @@ def plot_epochs(history, batch_history):
 	batches = total_batches/epochs
 	x = np.arange(1,epochs+1)
 	batch_x = np.arange(1,total_batches+1)/float(batches)
-	fig, ax1 = plt.subplots()
+	fig, ax1 = plt.subplots(figsize=(10,5))
 	ax2 = ax1.twinx()
 
 	ax1.plot(batch_x, batch_history['acc'], 'g:')
@@ -91,13 +91,27 @@ print("")
 # -+-+-+-+-+-+-+- BUILDING MODEL -+-+-+-+-+-+-+-
 
 print("BUILDING MODEL")
-# create the model
-embedding_vecor_length = 32
-model = Sequential()
+
+branch_3 = Sequential()
 model.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
 model.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 model.add(MaxPooling1D(pool_size=2))
 model.add(LSTM(100))
+
+branch_4 = Sequential()
+model.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
+model.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
+model.add(MaxPooling1D(pool_size=2))
+model.add(LSTM(100))
+
+branch_5 = Sequential()
+model.add(Embedding(top_words, embedding_vecor_length, input_length=max_review_length))
+model.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
+model.add(MaxPooling1D(pool_size=2))
+model.add(LSTM(100))
+
+model = Sequential()
+model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 print(model.summary())
