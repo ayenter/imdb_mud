@@ -93,7 +93,7 @@ print("")
 print("BUILDING MODEL")
 embedding_vecor_length = 32
 
-input_layer = Input()
+input_layer = Input(shape=(500,))
 
 branch_3 = Sequential()
 branch_3.add(input_layer)
