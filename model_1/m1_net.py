@@ -42,6 +42,16 @@ class ExtraHistory(keras.callbacks.Callback):
 
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
 
+def get_new_name(name):
+	if os.path.isfile(name):
+		temp = 1
+		no_ext = os.path.splitext(name)[0]
+		ext = os.path.splitext(name)[1]
+		while os.path.isfile(no_ext+str(temp)+ext):
+			temp+=1
+		name = no_ext+str(temp)+ext
+	return name
+
 def is_int(s):
     try: 
         int(s)
@@ -99,11 +109,12 @@ inputs = parser.parse_args()
 # -+-+-+-+-+-+-+- SET MODEL VERSION AND NAME -+-+-+-+-+-+-+-
 
 theversion = get_version()
+dir_name = os.path.dirname(os.path.realpath(__file__))
 version_name = "m" + theversion + "_" + str(inputs.num_epochs) + "_"
-diagram_name = "m" + theversion + "_" + "diagram.png"
-graph_name = version_name+"graph.png"
-data_name = version_name+"data.txt"
-
+diagram_name = get_new_name(os.path.join(dir_name, "m" + theversion + "_" + "diagram.png"))
+graph_name = get_new_name(os.path.join(dir_name, version_name + "graph.png"))
+data_name = get_new_name(os.path.join(dir_name, version_name + "data.txt"))
+avgs_name = os.path.join(dirname, "averages.csv")
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
 
@@ -179,6 +190,11 @@ print("")
 # -+-+-+-+-+-+-+- SAVING RESULTS -+-+-+-+-+-+-+-
 
 print("SAVING MODEL AND RESULTS")
+#  -> average
+print("Saving avg to " + avgs_name)
+with open(data_name, "a") as f:
+	writer = csv.writer(f)
+	writer.writerow([avg_acc])
 #  -> diagram
 print("Saving model diagram to " + diagram_name)
 plot_model(model, to_file=diagram_name)
