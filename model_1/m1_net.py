@@ -114,7 +114,7 @@ version_name = "m" + theversion + "_e" + str(inputs.num_epochs) + "_"
 diagram_name = get_new_name(os.path.join(dir_name, "m" + theversion + "_" + "diagram.png"))
 graph_name = get_new_name(os.path.join(dir_name, version_name + "graph.png"))
 data_name = get_new_name(os.path.join(dir_name, version_name + "data.txt"))
-avgs_name = os.path.join(dirname, "averages.csv")
+avgs_name = os.path.join(dir_name, "averages.csv")
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
 
