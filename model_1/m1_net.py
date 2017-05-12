@@ -19,27 +19,49 @@ from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
+from keras.utils import plot_model
+import matplotlib.pyplot as plt
 
 
 # -+-+-+-+-+-+-+- CALLBACK -+-+-+-+-+-+-+-
 
-class BatchHistory(keras.callbacks.Callback):
+class ExtraHistory(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
-        self.acc = []
-        self.loss = []
+        self.batch_acc = []
+        self.batch_loss = []
+        self.epoch_val_acc = []
+        self.epoch_data = []
     def on_batch_end(self, batch, logs={}):
-        self.acc.append(logs.get('acc'))
-        self.loss.append(logs.get('loss'))
+        self.batch_acc.append(logs.get('acc'))
+        self.batch_loss.append(logs.get('loss'))
+    def on_epoch_end(self, epoch, logs={}):
+    	self.epoch_val_acc.append(logs.get('val_acc'))
+    	self.epoch_data.append("Epoch: " + str(epoch) + " ==>   loss: " + str(logs.get('loss')) + "  -  acc: " + str(logs.get('acc')) + "  -  val_loss: " + str(logs.get('val_loss')) + "  -  val_acc: " + str(logs.get('val_acc')))
+
 
 
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
+
+def is_int(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+def get_version():
+	dir_name = os.path.dirname(os.path.realpath(__file__)).split('/')[-1]
+	if dir_name.find('_') != -1 and is_int(dir_name[dir_name.find('_')+1:]):
+		return dir_name[dir_name.find('_')+1:]
+	else:
+		return "V"
 
 def print_time(start, end):
 	hours, rem = divmod(end-start, 3600)
 	minutes, seconds = divmod(rem, 60)
 	print("{:0>2}h {:0>2}m {:05.2f}s ".format(int(hours),int(minutes),seconds))
 
-def plot_epochs(history, batch_history):
+def plot_epochs(history, batch_history, graph_name):
 	epochs = len(history['acc'])
 	total_batches = len(batch_history['acc'])
 	batches = total_batches/epochs
@@ -61,6 +83,7 @@ def plot_epochs(history, batch_history):
 	ax2.set_ylabel('Loss', color='r')
 
 	plt.margins(.05,.1)
+	plt.savefig(graph_name)
 	plt.show()
 
 
@@ -71,6 +94,14 @@ parser = argparse.ArgumentParser(description='Sentiment LSTM running through Ker
 parser.add_argument('--ssh', dest="ssh", action="store_true", default=False, help="Change matplotlib back-end for ssh")
 parser.add_argument('num_epochs', action="store", default=3, help="Number of Epochs", type=int)
 inputs = parser.parse_args()
+
+
+# -+-+-+-+-+-+-+- SET MODEL VERSION AND NAME -+-+-+-+-+-+-+-
+
+version_name = "m" + get_version() + "_" + str(inputs.num_epochs) + "_"
+diagram_name = version_name+"diagram.png"
+graph_name = version_name+"graph.png"
+data_name = version_name+"data.txt"
 
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
@@ -117,34 +148,39 @@ model = Sequential()
 model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-print(model.summary())
 print("")
 
 
 # -+-+-+-+-+-+-+- TRAINING MODEL -+-+-+-+-+-+-+-
 
-print("TRAINING MODEL")
-batch_hist = BatchHistory()
+print("RUNNING MODEL")
+extra_hist = ExtraHistory()
 start_time = time.time()
-hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=64, callbacks=[batch_hist])
+hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=64, callbacks=[extra_hist])
 end_time = time.time()
 print_time(start_time, end_time)
-batch_history = {}
-batch_history.update({'loss':np.asarray(batch_hist.loss)[::10]})
-batch_history.update({'acc':np.asarray(batch_hist.acc)[::10]})
 print("")
 
 
-# -+-+-+-+-+-+-+- EVALUATION AND PLOTTING -+-+-+-+-+-+-+-
+# -+-+-+-+-+-+-+- RESULTS -+-+-+-+-+-+-+-
 
-print("EVALUATION AND PLOTTING")
-# Final evaluation of the model
-scores = model.evaluate(X_test, y_test, verbose=0)
-print("Accuracy: %.2f%%" % (scores[1]*100))
-
-# import plt incase of 
-if inputs.ssh:
-	matplotlib.use('GTK')
-import matplotlib.pyplot as plt
-
-plot_epochs(hist.history, batch_history)
+print("RESULTS")
+# setup for conveying results
+avg_acc = sum(extra_hist.epoch_val_acc) / float(len(extra_hist.epoch_val_acc))
+batch_history = {}
+batch_history.update({'loss':np.asarray(extra_hist.batch_loss)[::10]})
+batch_history.update({'acc':np.asarray(extra_hist.batch_acc)[::10]})
+# print avg acc
+print( "Average Accuracy for " + str(inputs.num_epochs) + " epochs :  " + str(avg_acc*100) + "%" )
+# saving model information and results
+#  -> diagram
+print("Saving model diagram to " + diagram_name)
+plot_model(model, to_file=diagram_name)
+#  -> data
+print("Saving model results data to " + data_name)
+with open(data_name, "wb") as f:
+	f.writelines(extra_hist.epoch_data)
+	f.write("Average Accuracy for " + str(inputs.num_epochs) + " epochs :  " + str(avg_acc))
+#  -> graph
+print("Saving model results graph to " + graph_name)
+plot_epochs(hist.history, batch_history, graph_name)
