@@ -36,7 +36,7 @@ class ExtraHistory(keras.callbacks.Callback):
         self.batch_loss.append(logs.get('loss'))
     def on_epoch_end(self, epoch, logs={}):
     	self.epoch_val_acc.append(logs.get('val_acc'))
-    	self.epoch_data.append("Epoch: " + str(epoch) + " ==>   loss: " + str(logs.get('loss')) + "  -  acc: " + str(logs.get('acc')) + "  -  val_loss: " + str(logs.get('val_loss')) + "  -  val_acc: " + str(logs.get('val_acc')))
+    	self.epoch_data.append("Epoch: " + str(epoch) + " ==>   loss: " + str(logs.get('loss')) + "  -  acc: " + str(logs.get('acc')) + "  -  val_loss: " + str(logs.get('val_loss')) + "  -  val_acc: " + str(logs.get('val_acc')) + "\n")
 
 
 
@@ -98,8 +98,9 @@ inputs = parser.parse_args()
 
 # -+-+-+-+-+-+-+- SET MODEL VERSION AND NAME -+-+-+-+-+-+-+-
 
-version_name = "m" + get_version() + "_" + str(inputs.num_epochs) + "_"
-diagram_name = version_name+"diagram.png"
+theversion = get_version()
+version_name = "m" + theversion + "_" + str(inputs.num_epochs) + "_"
+diagram_name = "m" + theversion + "_" + "diagram.png"
 graph_name = version_name+"graph.png"
 data_name = version_name+"data.txt"
 
@@ -172,7 +173,12 @@ batch_history.update({'loss':np.asarray(extra_hist.batch_loss)[::10]})
 batch_history.update({'acc':np.asarray(extra_hist.batch_acc)[::10]})
 # print avg acc
 print( "Average Accuracy for " + str(inputs.num_epochs) + " epochs :  " + str(avg_acc*100) + "%" )
-# saving model information and results
+print("")
+
+
+# -+-+-+-+-+-+-+- SAVING RESULTS -+-+-+-+-+-+-+-
+
+print("SAVING MODEL AND RESULTS")
 #  -> diagram
 print("Saving model diagram to " + diagram_name)
 plot_model(model, to_file=diagram_name)
