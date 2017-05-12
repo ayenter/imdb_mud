@@ -110,7 +110,7 @@ inputs = parser.parse_args()
 
 theversion = get_version()
 dir_name = os.path.dirname(os.path.realpath(__file__))
-version_name = "m" + theversion + "_" + str(inputs.num_epochs) + "_"
+version_name = "m" + theversion + "_e" + str(inputs.num_epochs) + "_"
 diagram_name = get_new_name(os.path.join(dir_name, "m" + theversion + "_" + "diagram.png"))
 graph_name = get_new_name(os.path.join(dir_name, version_name + "graph.png"))
 data_name = get_new_name(os.path.join(dir_name, version_name + "data.txt"))
