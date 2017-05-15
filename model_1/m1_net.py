@@ -193,7 +193,7 @@ print("")
 print("SAVING MODEL AND RESULTS")
 #  -> average
 print("Saving avg to " + avgs_name)
-with open(data_name, "a") as f:
+with open(avgs_name, "a") as f:
 	writer = csv.writer(f)
 	writer.writerow([avg_acc])
 #  -> diagram
