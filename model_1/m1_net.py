@@ -211,7 +211,7 @@ print("")
 # -+-+-+-+-+-+-+- SAVING RESULTS -+-+-+-+-+-+-+-
 
 print("SAVING MODEL AND RESULTS")
-#  -> average
+#  -> data
 print("Saving data to " + data_name)
 with open(data_name, "a") as f:
 	writer = csv.writer(f)
@@ -223,11 +223,7 @@ with open(data_name, "a") as f:
 #  -> diagram
 print("Saving model diagram to " + diagram_name)
 plot_model(model, to_file=diagram_name)
-#  -> data
-print("Saving model results data to " + data_name)
-with open(data_name, "wb") as f:
-	f.writelines(extra_hist.epoch_data)
-	f.write("Average Accuracy for " + str(inputs.num_epochs) + " epochs :  " + str(avg_acc))
+
 #  -> graph
 print("Saving model results graph to " + graph_name)
 plot_epochs(hist.history, batch_history, graph_name)
