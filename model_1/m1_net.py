@@ -212,7 +212,7 @@ print("")
 
 print("SAVING MODEL AND RESULTS")
 #  -> average
-print("Saving avg to " + avgs_name)
+print("Saving data to " + data_name)
 with open(data_name, "a") as f:
 	writer = csv.writer(f)
 	writer.writerow([model_version, run_version, inputs.num_epochs, 'loss'] + extra_hist.epoch_data['loss'])
