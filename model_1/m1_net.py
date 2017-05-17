@@ -24,34 +24,46 @@ from keras.utils import plot_model
 import matplotlib.pyplot as plt
 
 
+# -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
+
+global_model = 1
+
+
+
 # -+-+-+-+-+-+-+- CALLBACK -+-+-+-+-+-+-+-
 
 class ExtraHistory(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
-        self.batch_acc = []
-        self.batch_loss = []
-        self.epoch_val_acc = []
-        self.epoch_data = []
+        self.batch_data = {'loss':[], 'acc':[]}
+        self.epoch_data = {'loss':[], 'acc':[], 'val_loss':[], 'val_acc':[]}
     def on_batch_end(self, batch, logs={}):
-        self.batch_acc.append(logs.get('acc'))
-        self.batch_loss.append(logs.get('loss'))
+        self.batch_data['loss'].append(logs.get('loss'))
+        self.batch_data['acc'].append(logs.get('acc'))
     def on_epoch_end(self, epoch, logs={}):
-    	self.epoch_val_acc.append(logs.get('val_acc'))
-    	self.epoch_data.append("Epoch: " + str(epoch) + " ==>   loss: " + str(logs.get('loss')) + "  -  acc: " + str(logs.get('acc')) + "  -  val_loss: " + str(logs.get('val_loss')) + "  -  val_acc: " + str(logs.get('val_acc')) + "\n")
+    	self.epoch_data['loss'].append(logs.get('loss'))
+    	self.epoch_data['acc'].append(logs.get('acc'))
+    	self.epoch_data['val_loss'].append(logs.get('val_loss'))
+    	self.epoch_data['val_acc'].append(logs.get('val_acc'))
 
 
 
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
 
-def get_new_name(name):
+def get_run_version(name):
+	run_v = 0
 	if os.path.isfile(name):
-		temp = 1
-		no_ext = os.path.splitext(name)[0]
-		ext = os.path.splitext(name)[1]
-		while os.path.isfile(no_ext+str(temp)+ext):
-			temp+=1
-		name = no_ext+str(temp)+ext
-	return name
+		data_info = []
+		with open(name, "rb") as f:
+			reader = csv.reader(f)
+			for row in reader:
+				data_info.append(row)
+		if len(data_info)>1:
+			run_v = int(data_info[-1][1])
+	else:
+		with open(name, "wb") as f:
+			writer = csv.writer(f)
+			writer.writerow(['model', 'run', '#epochs', 'metric', 'data ->'])
+	return run_v+1
 
 def is_int(s):
     try: 
@@ -109,13 +121,17 @@ inputs = parser.parse_args()
 
 # -+-+-+-+-+-+-+- SET MODEL VERSION AND NAME -+-+-+-+-+-+-+-
 
-theversion = get_version()
+model_version = str(global_model) #get_version()
 dir_name = os.path.dirname(os.path.realpath(__file__))
-version_name = "m" + theversion + "_e" + str(inputs.num_epochs) + "_"
-diagram_name = get_new_name(os.path.join(dir_name, "m" + theversion + "_" + "diagram.png"))
-graph_name = get_new_name(os.path.join(dir_name, version_name + "graph.png"))
-data_name = get_new_name(os.path.join(dir_name, version_name + "data.txt"))
-avgs_name = os.path.join(dir_name, "averages.csv")
+version_name = "m" + model_version + "_"
+epoch_name = "e" + str(inputs.num_epochs) + "_"
+diagram_name = os.path.join(dir_name, version_name + "diagram.png")
+data_name = os.path.join(dir_name, version_name + "data.csv")
+
+run_version = get_run_version(data_name)
+
+graph_name = os.path.join(dir_name, version_name + "r" + run_version + "_" + epoch_name + "graph.png")
+
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
 
@@ -179,12 +195,16 @@ print("")
 
 print("RESULTS")
 # setup for conveying results
-avg_acc = sum(extra_hist.epoch_val_acc) / float(len(extra_hist.epoch_val_acc))
 batch_history = {}
-batch_history.update({'loss':np.asarray(extra_hist.batch_loss)[::10]})
-batch_history.update({'acc':np.asarray(extra_hist.batch_acc)[::10]})
-# print avg acc
-print( "Average Accuracy for " + str(inputs.num_epochs) + " epochs :  " + str(avg_acc*100) + "%" )
+batch_history.update({'loss':np.asarray(extra_hist.batch_data['loss'])[::10]})
+batch_history.update({'acc':np.asarray(extra_hist.batch_data['acc'])[::10]})
+# print val_acc stats
+val_acc = extra_hist.epoch_data['val_acc']
+print("MODEL: " + str(model_version) + "  |  RUN: " + str(run_version) + "  |  #EPOCHS: " + str(inputs.num_epochs))
+print("----- ACCURACY -----")
+print("avg: " + str(np.mean(val_acc)))
+print("max: " + str(np.max(val_acc)))
+print("min: " + str(np.min(val_acc)))
 print("")
 
 
@@ -193,9 +213,13 @@ print("")
 print("SAVING MODEL AND RESULTS")
 #  -> average
 print("Saving avg to " + avgs_name)
-with open(avgs_name, "a") as f:
+with open(data_name, "a") as f:
 	writer = csv.writer(f)
-	writer.writerow([avg_acc])
+	writer.writerow([model_version, run_version, inputs.num_epochs, 'loss'] + extra_hist.epoch_data['loss'])
+	writer.writerow([model_version, run_version, inputs.num_epochs, 'acc'] + extra_hist.epoch_data['acc'])
+	writer.writerow([model_version, run_version, inputs.num_epochs, 'val_loss'] + extra_hist.epoch_data['val_loss'])
+	writer.writerow([model_version, run_version, inputs.num_epochs, 'val_acc'] + extra_hist.epoch_data['val_acc'])
+
 #  -> diagram
 print("Saving model diagram to " + diagram_name)
 plot_model(model, to_file=diagram_name)
