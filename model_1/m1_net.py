@@ -130,7 +130,7 @@ data_name = os.path.join(dir_name, version_name + "data.csv")
 
 run_version = get_run_version(data_name)
 
-graph_name = os.path.join(dir_name, version_name + "r" + run_version + "_" + epoch_name + "graph.png")
+graph_name = os.path.join(dir_name, version_name + "r" + str(run_version) + "_" + epoch_name + "graph.png")
 
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
