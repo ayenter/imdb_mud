@@ -14,7 +14,7 @@ import keras
 import csv
 from keras.datasets import imdb
 from keras.models import Sequential
-from keras.layers import Dense, Merge, Input, Reshape
+from keras.layers import Dense, Merge, Input, Reshape, Activation
 from keras.layers import LSTM
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
-global_model = 4
+global_model = 5
 
 
 
@@ -160,21 +160,27 @@ input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_revi
 
 branch_3 = Sequential()
 branch_3.add(input_layer)
-branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
+branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same'))
+branch_3.add(BatchNormalization())
+branch_3.add(Activation('relu'))
 branch_3.add(MaxPooling1D(pool_size=2))
-branch_3.add(LSTM(100))
+branch_3.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
 
 branch_4 = Sequential()
 branch_4.add(input_layer)
-branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', activation='relu'))
+branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same'))
+branch_4.add(BatchNormalization())
+branch_4.add(Activation('relu'))
 branch_4.add(MaxPooling1D(pool_size=2))
-branch_4.add(LSTM(100))
+branch_4.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
 
 branch_5 = Sequential()
 branch_5.add(input_layer)
-branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', activation='relu'))
+branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same'))
+branch_5.add(BatchNormalization())
+branch_5.add(Activation('relu'))
 branch_5.add(MaxPooling1D(pool_size=2))
-branch_5.add(LSTM(100))
+branch_5.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
 
 model = Sequential()
 model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
