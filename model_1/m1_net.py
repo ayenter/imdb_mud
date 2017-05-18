@@ -135,6 +135,9 @@ graph_name = os.path.join(dir_name, version_name + "r" + str(run_version) + "_" 
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
 
+print("")
+print(" >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< ")
+print("")
 print("PREPROCESSING DATA")
 # fix random seed for reproducibility
 np.random.seed(7)
@@ -227,3 +230,5 @@ plot_model(model, to_file=diagram_name)
 #  -> graph
 print("Saving model results graph to " + graph_name)
 plot_epochs(hist.history, batch_history, graph_name)
+print(" >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< ")
+print("")

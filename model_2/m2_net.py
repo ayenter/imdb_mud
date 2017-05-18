@@ -135,6 +135,9 @@ graph_name = os.path.join(dir_name, version_name + "r" + str(run_version) + "_" 
 
 # -+-+-+-+-+-+-+- DATA PREPROCESSING -+-+-+-+-+-+-+-
 
+print("")
+print(" >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< ")
+print("")
 print("PREPROCESSING DATA")
 # fix random seed for reproducibility
 np.random.seed(7)
@@ -159,19 +162,19 @@ branch_3 = Sequential()
 branch_3.add(input_layer)
 branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 branch_3.add(MaxPooling1D(pool_size=2))
-branch_3.add(LSTM(100))
+branch_3.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
 
 branch_4 = Sequential()
 branch_4.add(input_layer)
 branch_4.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 branch_4.add(MaxPooling1D(pool_size=2))
-branch_4.add(LSTM(100))
+branch_4.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
 
 branch_5 = Sequential()
 branch_5.add(input_layer)
 branch_5.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
 branch_5.add(MaxPooling1D(pool_size=2))
-branch_5.add(LSTM(100))
+branch_5.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
 
 model = Sequential()
 model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
@@ -211,7 +214,7 @@ print("")
 # -+-+-+-+-+-+-+- SAVING RESULTS -+-+-+-+-+-+-+-
 
 print("SAVING MODEL AND RESULTS")
-#  -> average
+#  -> data
 print("Saving data to " + data_name)
 with open(data_name, "a") as f:
 	writer = csv.writer(f)
@@ -223,11 +226,9 @@ with open(data_name, "a") as f:
 #  -> diagram
 print("Saving model diagram to " + diagram_name)
 plot_model(model, to_file=diagram_name)
-#  -> data
-print("Saving model results data to " + data_name)
-with open(data_name, "wb") as f:
-	f.writelines(extra_hist.epoch_data)
-	f.write("Average Accuracy for " + str(inputs.num_epochs) + " epochs :  " + str(avg_acc))
+
 #  -> graph
 print("Saving model results graph to " + graph_name)
 plot_epochs(hist.history, batch_history, graph_name)
+print(" >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< ")
+print("")
