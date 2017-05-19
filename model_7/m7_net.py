@@ -15,6 +15,7 @@ import csv
 from keras.datasets import imdb
 from keras.models import Sequential
 from keras.layers import Dense, Merge, Input, Reshape, Activation
+from keras.layers.normalization import BatchNormalization
 from keras.layers import LSTM
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
