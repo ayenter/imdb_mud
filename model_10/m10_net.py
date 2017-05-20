@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
-global_model = 9
+global_model = 10
 
 
 
