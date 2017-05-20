@@ -189,7 +189,6 @@ branch_5.add(LSTM(200))
 
 model = Sequential()
 model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
-model.add(Dropout(0.2))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 print("")
