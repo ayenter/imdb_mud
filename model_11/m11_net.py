@@ -63,7 +63,7 @@ def get_run_version(name):
 	else:
 		with open(name, "wb") as f:
 			writer = csv.writer(f)
-			writer.writerow(['model', 'run', '#epochs', 'metric', 'data ->'])
+			writer.writerow(['model', 'run', '#epochs', 'metric', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'e10',])
 	return run_v+1
 
 def is_int(s):
