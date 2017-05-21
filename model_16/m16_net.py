@@ -28,7 +28,7 @@ from keras.regularizers import l2
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
-global_model = 15
+global_model = 16
 
 
 
