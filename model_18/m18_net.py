@@ -29,6 +29,7 @@ from keras.regularizers import l2
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
 global_model = 18
+global_batch_size = 32
 
 
 
@@ -199,7 +200,7 @@ print("")
 print("RUNNING MODEL")
 extra_hist = ExtraHistory()
 start_time = time.time()
-hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=32, callbacks=[extra_hist])
+hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=global_batch_size, callbacks=[extra_hist])
 end_time = time.time()
 print_time(start_time, end_time)
 print("")
@@ -209,9 +210,10 @@ print("")
 
 print("RESULTS")
 # setup for conveying results
+skip_step = int((float(len(X_train))/global_batch_size)/39.0625)
 batch_history = {}
-batch_history.update({'loss':np.asarray(extra_hist.batch_data['loss'])[::10]})
-batch_history.update({'acc':np.asarray(extra_hist.batch_data['acc'])[::10]})
+batch_history.update({'loss':np.asarray(extra_hist.batch_data['loss'])[::skip_step]})
+batch_history.update({'acc':np.asarray(extra_hist.batch_data['acc'])[::skip_step]})
 # print val_acc stats
 val_acc = extra_hist.epoch_data['val_acc']
 print("MODEL: " + str(model_version) + "  |  RUN: " + str(run_version) + "  |  #EPOCHS: " + str(inputs.num_epochs))
