@@ -28,7 +28,7 @@ from keras.regularizers import l2
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
-global_model = 17
+global_model = 18
 
 
 
@@ -162,7 +162,7 @@ input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_revi
 
 branch_3 = Sequential()
 branch_3.add(input_layer)
-branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', kernel_regularizer=l2(.01)))
+branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', kernel_regularizer=l2(.1)))
 branch_3.add(Activation('relu'))
 branch_3.add(MaxPooling1D(pool_size=2))
 branch_3.add(Dropout(0.5))
@@ -171,7 +171,7 @@ branch_3.add(LSTM(100))
 
 branch_4 = Sequential()
 branch_4.add(input_layer)
-branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', kernel_regularizer=l2(.01)))
+branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', kernel_regularizer=l2(.1)))
 branch_4.add(Activation('relu'))
 branch_4.add(MaxPooling1D(pool_size=2))
 branch_4.add(Dropout(0.5))
@@ -180,7 +180,7 @@ branch_4.add(LSTM(100))
 
 branch_5 = Sequential()
 branch_5.add(input_layer)
-branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
+branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.1)))
 branch_5.add(Activation('relu'))
 branch_5.add(MaxPooling1D(pool_size=2))
 branch_5.add(Dropout(0.5))
@@ -199,7 +199,7 @@ print("")
 print("RUNNING MODEL")
 extra_hist = ExtraHistory()
 start_time = time.time()
-hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=16, callbacks=[extra_hist])
+hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=32, callbacks=[extra_hist])
 end_time = time.time()
 print_time(start_time, end_time)
 print("")
