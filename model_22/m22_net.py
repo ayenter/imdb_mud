@@ -182,8 +182,8 @@ tokenizer.fit_on_texts(X_train+X_test)
 seq_X_train = tokenizer.texts_to_sequences(X_train)
 seq_X_test = tokenizer.texts_to_sequences(X_test)
 
-data_X_train = pad_sequences(seq_X_train, maxlen=global_max_seq)
-data_X_test = pad_sequences(seq_X_test, maxlen=global_max_seq)
+data_X_train = sequence.pad_sequences(seq_X_train, maxlen=global_max_seq)
+data_X_test = sequence.pad_sequences(seq_X_test, maxlen=global_max_seq)
 
 word2vec = load_word2vec()
 
