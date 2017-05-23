@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 from keras.regularizers import l2
 from keras.preprocessing.text import Tokenizer
 from gensim.models import KeyedVectors
+import fasttext
 
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
@@ -186,7 +187,7 @@ seq_X_test = tokenizer.texts_to_sequences(X_test)
 data_X_train = sequence.pad_sequences(seq_X_train, maxlen=global_max_seq)
 data_X_test = sequence.pad_sequences(seq_X_test, maxlen=global_max_seq)
 
-word2vec = load_word2vec(path="../data/wiki.en.vec", binary="False")
+word2vec = fasttext.load_model("../data/wiki.en.bin")
 
 emb_matrix = np.zeros((len(tokenizer.word_index)+1, global_emb_dim))
 for w,i in tokenizer.word_index.items():
