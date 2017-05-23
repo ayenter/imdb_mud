@@ -214,7 +214,7 @@ print("")
 print("BUILDING MODEL")
 embedding_vecor_length = 32
 
-input_layer = Embedding(len(word_index)+1, global_emb_dim, weights=[emb_matrix], input_length=global_max_seq, trainable=False)
+input_layer = Embedding(len(tokenizer.word_index)+1, global_emb_dim, weights=[emb_matrix], input_length=global_max_seq, trainable=False)
 
 branch_3 = Sequential()
 branch_3.add(input_layer)
