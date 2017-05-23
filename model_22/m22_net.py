@@ -25,13 +25,16 @@ from keras.preprocessing import sequence
 from keras.utils import plot_model
 import matplotlib.pyplot as plt
 from keras.regularizers import l2
+from keras.preprocessing.text import Tokenizer
 
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
 global_model = 22
 global_batch_size = 32
-
+global_max_words = 5000
+global_max_seq = 500
+global_emb_dim = 300
 
 
 # -+-+-+-+-+-+-+- CALLBACK -+-+-+-+-+-+-+-
@@ -50,7 +53,6 @@ class ExtraHistory(keras.callbacks.Callback):
     	self.epoch_data['val_acc'].append(logs.get('val_acc'))
 
 
-
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
 
 def load_word2vec(path='../data/GoogleNews-vectors-negative300.bin', binary=True):
@@ -61,6 +63,7 @@ def load_word2vec(path='../data/GoogleNews-vectors-negative300.bin', binary=True
 	return model
 
 def get_text_data(path='../data'):
+	print("Grabbing Data from [train/pos, train/neg, test/pos, test/neg]")
 	# sets of data
 	X_train = []
 	y_train = []
@@ -78,10 +81,9 @@ def get_text_data(path='../data'):
 		bar = progressbar.ProgressBar()
 		for fname in bar(sorted(os.listdir(the_dict['dir']))):
 			with open(os.path.join(the_dict['dir'],fname), "rb") as f:
-				the_dict['X_set'].append(f.read())
+				the_dict['X_set'].append(f.read().replace("<br />",""))
 				the_dict['y_set'].append(the_dict['label'])
 	return [X_train, y_train, X_test, y_test]
-
 
 def get_run_version(name):
 	run_v = 0
@@ -173,15 +175,36 @@ print("")
 print(" >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< = >< ")
 print("")
 print("PREPROCESSING DATA")
-# fix random seed for reproducibility
-np.random.seed(7)
-# load the dataset but only keep the top n words, zero the rest
-top_words = 5000
-(X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=top_words)
-# truncate and pad input sequences
-max_review_length = 500
-X_train = sequence.pad_sequences(X_train, maxlen=max_review_length)
-X_test = sequence.pad_sequences(X_test, maxlen=max_review_length)
+# tokenizing
+X_train,y_train,X_test,y_test = get_text_data()
+tokenizer = Tokenizer(nb_words=global_max_words)
+tokenizer.fit_on_texts(X_train+X_test)
+seq_X_train = tokenizer.texts_to_sequences(X_train)
+seq_X_test = tokenizer.texts_to_sequences(X_test)
+
+data_X_train = pad_sequences(seq_X_train, maxlen=global_max_seq)
+data_X_test = pad_sequences(seq_X_test, maxlen=global_max_seq)
+
+word2vec = load_word2vec()
+
+emb_matrix = np.zeros((len(tokenizer.word_index), global_emb_dim))
+for w,i in tokenizer.word_index.itmes():
+	if w in word2vec:
+		emb_matrix[i] = word2vec[w]
+
+
+
+train_indices = np.arange(data_X_train.shape[0])
+test_indices = np.arange(data_X_test.shape[0])
+
+np.random.shuffle(train_indices)
+np.random.shuffle(test_indices)
+
+X_train = data_X_train[train_indices]
+X_test = data_X_test[test_indices]
+
+y_train = data_y_train[train_indices]
+y_test = data_y_test[test_indices]
 print("")
 
 
@@ -190,7 +213,7 @@ print("")
 print("BUILDING MODEL")
 embedding_vecor_length = 32
 
-input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_review_length)
+input_layer = Embedding(len(word_index)+1, global_emb_dim, weights=[emb_matrix], input_length=global_max_seq, trainable=False)
 
 branch_3 = Sequential()
 branch_3.add(input_layer)
