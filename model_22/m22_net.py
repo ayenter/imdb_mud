@@ -188,7 +188,7 @@ data_X_test = sequence.pad_sequences(seq_X_test, maxlen=global_max_seq)
 
 word2vec = load_word2vec()
 
-emb_matrix = np.zeros((len(tokenizer.word_index), global_emb_dim))
+emb_matrix = np.zeros((len(tokenizer.word_index)+1, global_emb_dim))
 for w,i in tokenizer.word_index.items():
 	if w in word2vec:
 		emb_matrix[i] = word2vec[w]
