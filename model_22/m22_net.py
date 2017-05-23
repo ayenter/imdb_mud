@@ -204,8 +204,8 @@ np.random.shuffle(test_indices)
 X_train = data_X_train[train_indices]
 X_test = data_X_test[test_indices]
 
-y_train = data_y_train[train_indices]
-y_test = data_y_test[test_indices]
+y_train = y_train[train_indices]
+y_test = y_test[test_indices]
 print("")
 
 
