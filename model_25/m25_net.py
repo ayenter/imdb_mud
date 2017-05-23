@@ -58,7 +58,7 @@ class ExtraHistory(keras.callbacks.Callback):
 
 def load_word2vec(path='../data/GoogleNews-vectors-negative300.bin', binary=True):
 	print("Loading Vectors...")
-	model = KeyedVectors.load_word2vec_format(path, binary=binary)
+	model = KeyedVectors.load_word2vec_format(path, binary=binary, unicode_errors='ignore')
 	print("Vectors Loaded")
 	print("")
 	return model
