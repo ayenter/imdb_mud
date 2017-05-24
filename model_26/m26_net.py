@@ -204,6 +204,7 @@ model = Sequential()
 model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+print(model.summary())
 print("")
 
 
