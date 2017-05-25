@@ -100,7 +100,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	model_1.add(Dense(300, activation='sigmoid'))
 
 	model = Sequential()
-	model.add(Merge([branch_3_1,branch_4_1,branch_5_1], mode='concat'))
+	model.add(Merge([branch_3_1,branch_4_1,branch_5_1, branch_3_2, branch_4_2, branch_5_2], mode='concat'))
 	model.add(Flatten())
 	model.add(Dropout(0.5))
 	model.add(Dense(1, activation='sigmoid'))
