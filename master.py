@@ -107,7 +107,7 @@ def plot_epochs(history, batch_history, graph_name):
 	plt.show()
 
 
-def run_model(model, model_version, batch_size, num_epochs, top_words, max_review_length, dir_name)
+def run_model(model, model_version, batch_size, num_epochs, top_words, max_review_length, dir_name):
 
 	# -+-+-+-+-+-+-+- ARGUMENTS -+-+-+-+-+-+-+-
 
