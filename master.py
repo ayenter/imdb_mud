@@ -118,7 +118,7 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 
 	model_version = str(model_version) #get_version()
 	version_name = "m" + model_version + "_"
-	epoch_name = "e" + str(inputs.num_epochs) + "_"
+	epoch_name = "e" + str(num_epochs) + "_"
 	diagram_name = os.path.join(dir_name, version_name + "diagram.png")
 	data_name = os.path.join(dir_name, version_name + "data.csv")
 
@@ -148,7 +148,7 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 	print("RUNNING MODEL")
 	extra_hist = ExtraHistory()
 	start_time = time.time()
-	hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=inputs.num_epochs, batch_size=global_batch_size, callbacks=[extra_hist])
+	hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=num_epochs, batch_size=global_batch_size, callbacks=[extra_hist])
 	end_time = time.time()
 	print_time(start_time, end_time)
 	print("")
