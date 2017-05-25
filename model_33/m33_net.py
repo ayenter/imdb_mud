@@ -42,6 +42,7 @@ from keras.regularizers import l2
 
 
 def build_model(top_words, embedding_vecor_length, max_review_length, show_summaries=False):
+	model = Sequential()
 	input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_review_length)
 	model.add(input_layer)
 	model.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
