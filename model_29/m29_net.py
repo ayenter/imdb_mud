@@ -41,31 +41,67 @@ from keras.regularizers import l2
 def build_model(top_words, embedding_vecor_length, max_review_length, show_summaries=False):
 	input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_review_length)
 
+	# --- 3 ---
 	branch_3 = Sequential()
 	branch_3.add(input_layer)
 	branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', kernel_regularizer=l2(.01)))
 	branch_3.add(Activation('relu'))
-	branch_3.add(MaxPooling1D(pool_size=500))
+
+	branch_3_1 = Sequential()
+	branch_3_1.add(branch_3)
+	branch_3_1.add(MaxPooling1D(pool_size=500))
 
 	branch_3_2 = Sequential()
 	branch_3_2.add(branch_3)
+	branch_3_2.add(MaxPooling1D(pool_size=2))
+	branch_3_2.add(Dropout(0.5))
+	branch_3_2.add(BatchNormalization())
+	branch_3_2.add(LSTM(100))
 
+	# --- 4 ---
 	branch_4 = Sequential()
 	branch_4.add(input_layer)
 	branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', kernel_regularizer=l2(.01)))
 	branch_4.add(Activation('relu'))
-	branch_4.add(MaxPooling1D(pool_size=500))
 
+	branch_4_1 = Sequential()
+	branch_4_1.add(branch_4)
+	branch_4_1.add(MaxPooling1D(pool_size=500))
+
+	branch_4_2 = Sequential()
+	branch_4_2.add(branch_4)
+	branch_4_2.add(MaxPooling1D(pool_size=2))
+	branch_4_2.add(Dropout(0.5))
+	branch_4_2.add(BatchNormalization())
+	branch_4_2.add(LSTM(100))
+
+	# --- 5 ---
 	branch_5 = Sequential()
 	branch_5.add(input_layer)
 	branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_5.add(Activation('relu'))
-	branch_5.add(MaxPooling1D(pool_size=500))
 
-	model = Sequential()
-	model.add(Merge([branch_3_2,branch_4,branch_5], mode='concat'))
+	branch_5_1 = Sequential()
+	branch_5_1.add(branch_5)
+	branch_5_1.add(MaxPooling1D(pool_size=500))
+
+	branch_5_2 = Sequential()
+	branch_5_2.add(branch_5)
+	branch_5_2.add(MaxPooling1D(pool_size=2))
+	branch_5_2.add(Dropout(0.5))
+	branch_5_2.add(BatchNormalization())
+	branch_5_2.add(LSTM(100))
+
+
+	model_1 = Sequential()
+	model_1.add(Merge([branch_3_1,branch_4_1,branch_5_1], mode='concat'))
+	model_1.add(Flatten())
+	model_1.add(Dropout(0.5))
+	model_1.add(Dense(300, activation='sigmoid'))
+
+	model.add(Merge([branch_3_1,branch_4_1,branch_5_1], mode='concat'))
 	model.add(Flatten())
-	model.add(Dense(300, activation='sigmoid'))
+	model.add(Dropout(0.5))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
