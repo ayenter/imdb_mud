@@ -79,7 +79,7 @@ parser = argparse.ArgumentParser(description='Sentiment LSTM running through Ker
 parser.add_argument('-s', dest="show_summaries", action="store_true", default=False, help="Show network summaries")
 parser.add_argument('num_epochs', action="store", default=3, help="Number of Epochs", type=int)
 inputs = parser.parse_args()
-run_model(build_model(global_top_words, global_embedding_vecor_length, global_max_review_length, show_summaries), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
+run_model(build_model(global_top_words, global_embedding_vecor_length, global_max_review_length, inputs.show_summaries), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
 
 
 
