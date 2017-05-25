@@ -46,6 +46,18 @@ class ExtraHistory(keras.callbacks.Callback):
 
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
 
+def generate_read_me(model_version, dir_name, model_description):
+	mv = str(model_version)
+	with open(os.path.join(dir_name,"README.md"), "wb") as f:
+		f.write('# Model'+ mv)
+		f.write('\n')
+		f.write('## '+ model_description)
+		f.write('\n')
+		f.write("![diagram](https://github.com/ayenter/imdb_mud/blob/master/model_"+mv+"/m"+mv+"_diagram.png)")
+		f.write('\n')
+		f.write("![graph](https://github.com/ayenter/imdb_mud/blob/master/model_"+mv+"/m"+mv+"_r1_e10_graph.png)")
+
+
 def get_run_version(name):
 	run_v = 0
 	if os.path.isfile(name):
