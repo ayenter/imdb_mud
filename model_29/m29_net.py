@@ -48,7 +48,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(MaxPooling1D(pool_size=500))
 
 	branch_3_2 = Sequential()
-	branch_3_2.add(Merge([branch_3], mode='concat'))
+	branch_3_2.add(Merge(branch_3))
 
 	branch_4 = Sequential()
 	branch_4.add(input_layer)
