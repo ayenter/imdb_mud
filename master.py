@@ -49,7 +49,7 @@ class ExtraHistory(keras.callbacks.Callback):
 def generate_read_me(model_version, dir_name, model_description):
 	mv = str(model_version)
 	with open(os.path.join(dir_name,"README.md"), "wb") as f:
-		f.write('# Model'+ mv)
+		f.write('# Model '+ mv)
 		f.write('\n')
 		f.write('## '+ model_description)
 		f.write('\n')
