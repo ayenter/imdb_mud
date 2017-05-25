@@ -6,7 +6,7 @@
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
 import os
-global_model_version = 27
+global_model_version = 28
 global_batch_size = 32
 global_top_words = 5000
 global_max_review_length = 500
