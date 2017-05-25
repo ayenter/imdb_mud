@@ -32,7 +32,6 @@ from keras.layers import LSTM
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 from keras.layers.embeddings import Embedding
-from keras.layers.merge import Concatenate
 from keras.preprocessing import sequence
 from keras.utils import plot_model
 import matplotlib.pyplot as plt
@@ -61,7 +60,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length):
 	branch_5.add(MaxPooling1D(pool_size=500))
 
 	model = Sequential()
-	model.add(Concatenate([branch_3,branch_4,branch_5]))
+	model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
