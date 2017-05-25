@@ -26,7 +26,7 @@ import keras
 import csv
 from keras.datasets import imdb
 from keras.models import Sequential
-from keras.layers import Dense, Merge, Input, Reshape, Activation, Dropout
+from keras.layers import Dense, Merge, Input, Reshape, Activation, Dropout, Flatten
 from keras.layers.normalization import BatchNormalization
 from keras.layers import LSTM
 from keras.layers.convolutional import Conv1D
@@ -61,6 +61,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length):
 
 	model = Sequential()
 	model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
+	model.add(Flatten())
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
