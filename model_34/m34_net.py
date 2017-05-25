@@ -13,7 +13,7 @@ global_max_review_length = 500
 global_dir_name = os.path.dirname(os.path.realpath(__file__))
 global_embedding_vecor_length = 32
 
-global_model_description = "conv(3/4/5x32)[l2(0.01)] -> relu -> maxpool(2) -> dropout(0.5) -> batchnorm -> lstm(50) -> merge(concat) -> dense(1)  [32 batch size]"
+global_model_description = "conv(3/4/5x32)[l2(0.01)] -> relu -> maxpool(2) -> dropout(0.5) -> dense(24) -> relu -> dropout(0.5) -> batchnorm -> lstm(150) -> merge(concat) -> dense(1)  [32 batch size]"
 
 
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
@@ -54,7 +54,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(Dense(24, activation='relu'))
 	branch_3.add(Dropout(0.5))
 	branch_3.add(BatchNormalization())
-	branch_3.add(LSTM(50))
+	branch_3.add(LSTM(150))
 
 	# --- 4 ---
 	branch_4 = Sequential()
@@ -66,7 +66,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(Dense(24, activation='relu'))
 	branch_3.add(Dropout(0.5))
 	branch_4.add(BatchNormalization())
-	branch_4.add(LSTM(50))
+	branch_4.add(LSTM(150))
 
 	# --- 5 ---
 	branch_5 = Sequential()
@@ -78,7 +78,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(Dense(24, activation='relu'))
 	branch_3.add(Dropout(0.5))
 	branch_5.add(BatchNormalization())
-	branch_5.add(LSTM(50))
+	branch_5.add(LSTM(150))
 
 	model = Sequential()
 	model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
