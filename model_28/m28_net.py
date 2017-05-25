@@ -62,7 +62,9 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	model = Sequential()
 	model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
 	model.add(Flatten())
+	model.add(Dropout(0.5))
 	model.add(Dense(300, activation='sigmoid'))
+	model.add(Dropout(0.5))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
