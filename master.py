@@ -103,7 +103,8 @@ def plot_epochs(history, batch_history, graph_name):
 	ax2.set_ylabel('Loss', color='r')
 
 	plt.margins(.05,.1)
-	plt.legend(['Train', 'Valid', 'Train', 'Valid'], loc='lower left')
+	ax1.legend(['Train', 'Valid'], loc='lower left')
+	ax2.legend(['Train', 'Valid'], loc='lower left')
 	plt.savefig(graph_name)
 	plt.show()
 
