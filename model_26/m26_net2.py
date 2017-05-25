@@ -84,7 +84,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length):
 	model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-	print("")
+	return model
+	
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 parser = argparse.ArgumentParser(description='Sentiment LSTM running through Keras on IMDb movie reviews')
