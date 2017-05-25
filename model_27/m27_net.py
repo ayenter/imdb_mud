@@ -32,6 +32,7 @@ from keras.layers import LSTM
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 from keras.layers.embeddings import Embedding
+from keras.layers.merge import Concatenate
 from keras.preprocessing import sequence
 from keras.utils import plot_model
 import matplotlib.pyplot as plt
@@ -45,43 +46,22 @@ def build_model(top_words, embedding_vecor_length, max_review_length):
 	branch_3.add(input_layer)
 	branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', kernel_regularizer=l2(.01)))
 	branch_3.add(Activation('relu'))
-	branch_3.add(MaxPooling1D(pool_size=2))
-	branch_3.add(Dropout(0.5))
-	branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', kernel_regularizer=l2(.01)))
-	branch_3.add(Activation('relu'))
-	branch_3.add(MaxPooling1D(pool_size=2))
-	branch_3.add(Dropout(0.5))
-	branch_3.add(BatchNormalization())
-	branch_3.add(LSTM(100))
+	branch_3.add(MaxPooling1D(pool_size=500))
 
 	branch_4 = Sequential()
 	branch_4.add(input_layer)
 	branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', kernel_regularizer=l2(.01)))
 	branch_4.add(Activation('relu'))
-	branch_4.add(MaxPooling1D(pool_size=2))
-	branch_4.add(Dropout(0.5))
-	branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', kernel_regularizer=l2(.01)))
-	branch_4.add(Activation('relu'))
-	branch_4.add(MaxPooling1D(pool_size=2))
-	branch_4.add(Dropout(0.5))
-	branch_4.add(BatchNormalization())
-	branch_4.add(LSTM(100))
+	branch_4.add(MaxPooling1D(pool_size=500))
 
 	branch_5 = Sequential()
 	branch_5.add(input_layer)
 	branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_5.add(Activation('relu'))
-	branch_5.add(MaxPooling1D(pool_size=2))
-	branch_5.add(Dropout(0.5))
-	branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
-	branch_5.add(Activation('relu'))
-	branch_5.add(MaxPooling1D(pool_size=2))
-	branch_5.add(Dropout(0.5))
-	branch_5.add(BatchNormalization())
-	branch_5.add(LSTM(100))
+	branch_5.add(MaxPooling1D(pool_size=500))
 
 	model = Sequential()
-	model.add(Merge([branch_3,branch_4,branch_5], mode='concat'))
+	model.add(Concatenate([branch_3,branch_4,branch_5]))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
