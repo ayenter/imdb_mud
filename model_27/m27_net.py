@@ -38,7 +38,7 @@ import matplotlib.pyplot as plt
 from keras.regularizers import l2
 
 
-def build_model(top_words, embedding_vecor_length, max_review_length):
+def build_model(top_words, embedding_vecor_length, max_review_length, show_summaries=False):
 	input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_review_length)
 
 	branch_3 = Sequential()
@@ -65,20 +65,21 @@ def build_model(top_words, embedding_vecor_length, max_review_length):
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-	print(branch_3.summary())
-	print(branch_4.summary())
-	print(branch_5.summary())
-	print(model.summary())
+	if show_summaries:
+		print(branch_3.summary())
+		print(branch_4.summary())
+		print(branch_5.summary())
+		print(model.summary())
 
 	return model
 
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 parser = argparse.ArgumentParser(description='Sentiment LSTM running through Keras on IMDb movie reviews')
-parser.add_argument('--ssh', dest="ssh", action="store_true", default=False, help="Change matplotlib back-end for ssh")
+parser.add_argument('-s', dest="show_summaries", action="store_true", default=False, help="Show network summaries")
 parser.add_argument('num_epochs', action="store", default=3, help="Number of Epochs", type=int)
 inputs = parser.parse_args()
-run_model(build_model(global_top_words, global_embedding_vecor_length, global_max_review_length), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
+run_model(build_model(global_top_words, global_embedding_vecor_length, global_max_review_length, show_summaries), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
 
 
 
