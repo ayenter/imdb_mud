@@ -13,7 +13,7 @@ global_max_review_length = 500
 global_dir_name = os.path.dirname(os.path.realpath(__file__))
 global_embedding_vecor_length = 32
 
-global_model_description = "conv(3/4/5x32)[l2(0.01)] -> relu -> maxpool(2) -> dropout(0.5) -> batchnorm -> lstm(50) -> merge(concat) -> dense(1)  [32 batch size]"
+global_model_description = "conv(3x32) -> relu -> maxpool(2) -> dense(250) -> relu -> dense(1) -> sigmoid  [32 batch size]"
 
 
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
