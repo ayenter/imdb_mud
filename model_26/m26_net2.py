@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 from keras.regularizers import l2
 
 
-def build_model(top_words):
+def build_model(top_words, embedding_vecor_length, max_review_length):
 	input_layer = Embedding(top_words, embedding_vecor_length, input_length=max_review_length)
 
 	branch_3 = Sequential()
@@ -90,7 +90,7 @@ parser = argparse.ArgumentParser(description='Sentiment LSTM running through Ker
 parser.add_argument('--ssh', dest="ssh", action="store_true", default=False, help="Change matplotlib back-end for ssh")
 parser.add_argument('num_epochs', action="store", default=3, help="Number of Epochs", type=int)
 inputs = parser.parse_args()
-run_model(build_model(), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
+run_model(build_model(global_top_words, global_embedding_vecor_length, global_max_review_length), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
 
 
 
