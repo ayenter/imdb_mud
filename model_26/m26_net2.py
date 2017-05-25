@@ -11,6 +11,7 @@ global_batch_size = 32
 global_top_words = 5000
 global_max_review_length = 500
 global_dir_name = os.path.dirname(os.path.realpath(__file__))
+global_embedding_vecor_length = 32
 
 
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
