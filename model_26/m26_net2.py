@@ -5,6 +5,7 @@
 
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
+import os
 global_model_version = 26
 global_batch_size = 32
 global_top_words = 5000
@@ -20,7 +21,6 @@ import time
 import numpy as np
 import matplotlib
 import argparse
-import os
 import keras
 import csv
 from keras.datasets import imdb
