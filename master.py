@@ -148,7 +148,7 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 	print("RUNNING MODEL")
 	extra_hist = ExtraHistory()
 	start_time = time.time()
-	hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=num_epochs, batch_size=global_batch_size, callbacks=[extra_hist])
+	hist = model.fit(np.vstack((X_train,X_test)), np.hstack((y_train,y_test)), validation_split=0.5, epochs=num_epochs, batch_size=batch_size, callbacks=[extra_hist])
 	end_time = time.time()
 	print_time(start_time, end_time)
 	print("")
@@ -158,13 +158,13 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 
 	print("RESULTS")
 	# setup for conveying results
-	skip_step = int((float(len(X_train))/global_batch_size)/39.0625)
+	skip_step = int((float(len(X_train))/batch_size)/39.0625)
 	batch_history = {}
 	batch_history.update({'loss':np.asarray(extra_hist.batch_data['loss'])[::skip_step]})
 	batch_history.update({'acc':np.asarray(extra_hist.batch_data['acc'])[::skip_step]})
 	# print val_acc stats
 	val_acc = extra_hist.epoch_data['val_acc']
-	print("MODEL: " + str(model_version) + "  |  RUN: " + str(run_version) + "  |  #EPOCHS: " + str(inputs.num_epochs))
+	print("MODEL: " + str(model_version) + "  |  RUN: " + str(run_version) + "  |  #EPOCHS: " + str(num_epochs))
 	print("----- ACCURACY -----")
 	print("avg: " + str(np.mean(val_acc)))
 	print("max: " + str(np.max(val_acc)))
@@ -179,10 +179,10 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 	print("Saving data to " + data_name)
 	with open(data_name, "a") as f:
 		writer = csv.writer(f)
-		writer.writerow([model_version, run_version, inputs.num_epochs, 'loss'] + extra_hist.epoch_data['loss'])
-		writer.writerow([model_version, run_version, inputs.num_epochs, 'acc'] + extra_hist.epoch_data['acc'])
-		writer.writerow([model_version, run_version, inputs.num_epochs, 'val_loss'] + extra_hist.epoch_data['val_loss'])
-		writer.writerow([model_version, run_version, inputs.num_epochs, 'val_acc'] + extra_hist.epoch_data['val_acc'])
+		writer.writerow([model_version, run_version, num_epochs, 'loss'] + extra_hist.epoch_data['loss'])
+		writer.writerow([model_version, run_version, num_epochs, 'acc'] + extra_hist.epoch_data['acc'])
+		writer.writerow([model_version, run_version, num_epochs, 'val_loss'] + extra_hist.epoch_data['val_loss'])
+		writer.writerow([model_version, run_version, num_epochs, 'val_acc'] + extra_hist.epoch_data['val_acc'])
 
 	#  -> diagram
 	print("Saving model diagram to " + diagram_name)
