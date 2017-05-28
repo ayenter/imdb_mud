@@ -25,6 +25,8 @@ from keras.preprocessing import sequence
 from keras.utils import plot_model
 import matplotlib.pyplot as plt
 from keras.regularizers import l2
+from keras.preprocessing.text import Tokenizer
+from gensim.models import KeyedVectors
 
 
 
