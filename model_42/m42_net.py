@@ -19,7 +19,7 @@ global_model_description = "conv(2/3/4/5/6/7x32)[l2(0.01)] -> relu -> maxpool(2)
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
 import sys
 sys.path.append('..')
-from master import run_model, generate_read_me
+from master_ggl import run_model, generate_read_me, get_text_data, load_word2vec
 import time
 import numpy as np
 import matplotlib
@@ -90,8 +90,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	model = Sequential()
 	model.add(Merge([branch_2,branch_3,branch_4,branch_5,branch_6,branch_7], mode='concat'))
 	model.add(Flatten())
-	model.add(Dense(1, activation='softmax'))
-	model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+	model.add(Dense(1, activation='sigmoid'))
+	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 	if show_summaries:
 		print(branch_3.summary())
@@ -107,6 +107,7 @@ parser = argparse.ArgumentParser(description='Sentiment LSTM running through Ker
 parser.add_argument('-s', dest="show_summaries", action="store_true", default=False, help="Show network summaries")
 parser.add_argument('num_epochs', action="store", default=3, help="Number of Epochs", type=int)
 inputs = parser.parse_args()
+
 generate_read_me(global_model_version, global_dir_name, global_model_description)
 run_model(build_model(global_top_words, global_embedding_vecor_length, global_max_review_length, inputs.show_summaries), global_model_version, global_batch_size, inputs.num_epochs, global_top_words, global_max_review_length, global_dir_name)
 

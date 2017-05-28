@@ -180,10 +180,34 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 	# fix random seed for reproducibility
 	np.random.seed(7)
 	# load the dataset but only keep the top n words, zero the rest
-	(X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=top_words)
-	# truncate and pad input sequences
-	X_train = sequence.pad_sequences(X_train, maxlen=max_review_length)
-	X_test = sequence.pad_sequences(X_test, maxlen=max_review_length)
+	X_train,y_train,X_test,y_test = get_text_data()
+	tokenizer = Tokenizer(nb_words=global_max_words)
+	tokenizer.fit_on_texts(X_train+X_test)
+	seq_X_train = tokenizer.texts_to_sequences(X_train)
+	seq_X_test = tokenizer.texts_to_sequences(X_test)
+
+	data_X_train = sequence.pad_sequences(seq_X_train, maxlen=global_max_seq)
+	data_X_test = sequence.pad_sequences(seq_X_test, maxlen=global_max_seq)
+
+	word2vec = load_word2vec()
+
+	emb_matrix = np.zeros((len(tokenizer.word_index)+1, global_emb_dim))
+	for w,i in tokenizer.word_index.items():
+		if w in word2vec:
+			emb_matrix[i] = word2vec[w]
+
+
+	train_indices = np.arange(data_X_train.shape[0])
+	test_indices = np.arange(data_X_test.shape[0])
+
+	np.random.shuffle(train_indices)
+	np.random.shuffle(test_indices)
+
+	X_train = data_X_train[train_indices]
+	X_test = data_X_test[test_indices]
+
+	y_train = np.asarray(y_train)[train_indices]
+	y_test = np.asarray(y_test)[test_indices]
 	print("")
 
 
