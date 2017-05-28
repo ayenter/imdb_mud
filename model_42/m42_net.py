@@ -90,7 +90,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	model = Sequential()
 	model.add(Merge([branch_2,branch_3,branch_4,branch_5,branch_6,branch_7], mode='concat'))
 	model.add(Flatten())
-	model.add(Dense(3, activation='softmax'))
+	model.add(Dense(1, activation='softmax'))
 	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 	if show_summaries:
