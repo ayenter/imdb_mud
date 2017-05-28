@@ -50,6 +50,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_2.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_2.add(Activation('relu'))
 	branch_2.add(MaxPooling1D(pool_size=32))
+	branch_2.add(BatchNormalization())
+	branch_2.add(LSTM(150))
 
 	# --- 3 ---
 	branch_3 = Sequential()
@@ -57,6 +59,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(Conv1D(filters=32, kernel_size=3, padding='same', kernel_regularizer=l2(.01)))
 	branch_3.add(Activation('relu'))
 	branch_3.add(MaxPooling1D(pool_size=32))
+	branch_3.add(BatchNormalization())
+	branch_3.add(LSTM(150))
 
 	# --- 4 ---
 	branch_4 = Sequential()
@@ -64,6 +68,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_4.add(Conv1D(filters=32, kernel_size=4, padding='same', kernel_regularizer=l2(.01)))
 	branch_4.add(Activation('relu'))
 	branch_4.add(MaxPooling1D(pool_size=32))
+	branch_4.add(BatchNormalization())
+	branch_4.add(LSTM(150))
 
 	# --- 5 ---
 	branch_5 = Sequential()
@@ -71,6 +77,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_5.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_5.add(Activation('relu'))
 	branch_5.add(MaxPooling1D(pool_size=32))
+	branch_5.add(BatchNormalization())
+	branch_5.add(LSTM(150))
 
 	# --- 6 ---
 	branch_6 = Sequential()
@@ -78,6 +86,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_6.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_6.add(Activation('relu'))
 	branch_6.add(MaxPooling1D(pool_size=32))
+	branch_6.add(BatchNormalization())
+	branch_6.add(LSTM(150))
 
 	# --- 7 ---
 	branch_7 = Sequential()
@@ -85,6 +95,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_7.add(Conv1D(filters=32, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_7.add(Activation('relu'))
 	branch_7.add(MaxPooling1D(pool_size=32))
+	branch_7.add(BatchNormalization())
+	branch_7.add(LSTM(150))
 
 
 	model = Sequential()
