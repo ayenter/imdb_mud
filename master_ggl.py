@@ -184,17 +184,17 @@ def run_model(model, model_version, batch_size, num_epochs, top_words, max_revie
 	np.random.seed(7)
 	# load the dataset but only keep the top n words, zero the rest
 	X_train,y_train,X_test,y_test = get_text_data()
-	tokenizer = Tokenizer(nb_words=global_max_words)
+	tokenizer = Tokenizer(nb_words=top_words)
 	tokenizer.fit_on_texts(X_train+X_test)
 	seq_X_train = tokenizer.texts_to_sequences(X_train)
 	seq_X_test = tokenizer.texts_to_sequences(X_test)
 
-	data_X_train = sequence.pad_sequences(seq_X_train, maxlen=global_max_seq)
-	data_X_test = sequence.pad_sequences(seq_X_test, maxlen=global_max_seq)
+	data_X_train = sequence.pad_sequences(seq_X_train, maxlen=max_review_length)
+	data_X_test = sequence.pad_sequences(seq_X_test, maxlen=max_review_length)
 
 	word2vec = load_word2vec()
 
-	emb_matrix = np.zeros((len(tokenizer.word_index)+1, global_emb_dim))
+	emb_matrix = np.zeros((len(tokenizer.word_index)+1, 300))
 	for w,i in tokenizer.word_index.items():
 		if w in word2vec:
 			emb_matrix[i] = word2vec[w]
