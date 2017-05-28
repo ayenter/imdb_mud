@@ -47,14 +47,14 @@ class ExtraHistory(keras.callbacks.Callback):
 
 # -+-+-+-+-+-+-+- FUNCTIONS -+-+-+-+-+-+-+-
 
-def load_word2vec(path='data/GoogleNews-vectors-negative300.bin', binary=True):
+def load_word2vec(path='../data/GoogleNews-vectors-negative300.bin', binary=True):
 	print("Loading Vectors...")
 	model = KeyedVectors.load_word2vec_format(path, binary=binary)
 	print("Vectors Loaded")
 	print("")
 	return model
 
-def get_text_data(path='data'):
+def get_text_data(path='../data'):
 	print("Grabbing Data from [train/pos, train/neg, test/pos, test/neg]")
 	# sets of data
 	X_train = []
