@@ -19,7 +19,7 @@ global_model_description = "conv(2/3/4/5/6/7x32)[l2(0.01)] -> relu -> maxpool(2)
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
 import sys
 sys.path.append('..')
-from master_ggl import run_model, generate_read_me, get_text_data, load_word2vec
+from master import run_model, generate_read_me, get_text_data, load_word2vec
 import time
 import numpy as np
 import matplotlib
