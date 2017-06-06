@@ -47,6 +47,9 @@ def plot_csv():
 	plt.legend(full_csv[top_idx][:,0], loc='lower right')
 	plt.show()
 
+
+plot_csv()
+
 """
 full_csv = np.asarray(get_csv())
 	i_max = full_csv.argmax(axis=0)[3:]
