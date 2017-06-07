@@ -6,7 +6,7 @@
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
 import os
-global_model_version = 52
+global_model_version = 53
 global_batch_size = 128
 global_top_words = 5000
 global_max_review_length = 500
@@ -89,7 +89,8 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	model = Sequential()
 	model.add(Merge([branch_3,branch_5,branch_7,branch_9], mode='concat'))
 	model.add(Dense(1, activation='sigmoid'))
-	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+	adam = keras.optimizers.Adam(lr=0.0001)
+	model.compile(loss='binary_crossentropy', optimizer=adam, metrics=['accuracy'])
 
 	if show_summaries:
 		print(branch_3.summary())
