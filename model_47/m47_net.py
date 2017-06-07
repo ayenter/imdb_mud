@@ -13,7 +13,7 @@ global_max_review_length = 500
 global_dir_name = os.path.dirname(os.path.realpath(__file__))
 global_embedding_vecor_length = 32
 
-global_model_description = "conv(2/3/4/5/6/7x512)[l2(0.01)] -> relu -> maxpool(32) -> dropout(0.95) -> batchnorm -> lstm(512) -> merge(concat) -> dropout(0.95) -> dense(1)  [ 32 batch size ]"
+global_model_description = "conv(2/3/4/5/6/7x512)[l2(0.01)] -> relu -> maxpool(32) -> dropout(0.7) -> batchnorm -> lstm(512) -> merge(concat) -> dropout(0.7) -> dense(1)  [ 32 batch size ]"
 
 
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
@@ -50,7 +50,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_2.add(Conv1D(filters=512, kernel_size=2, padding='same', kernel_regularizer=l2(.01)))
 	branch_2.add(Activation('relu'))
 	branch_2.add(MaxPooling1D(pool_size=32))
-	branch_2.add(Dropout(0.95))
+	branch_2.add(Dropout(0.7))
 	branch_2.add(BatchNormalization())
 	branch_2.add(LSTM(512))
 
@@ -60,7 +60,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(Conv1D(filters=512, kernel_size=3, padding='same', kernel_regularizer=l2(.01)))
 	branch_3.add(Activation('relu'))
 	branch_3.add(MaxPooling1D(pool_size=32))
-	branch_3.add(Dropout(0.95))
+	branch_3.add(Dropout(0.7))
 	branch_3.add(BatchNormalization())
 	branch_3.add(LSTM(512))
 
@@ -70,7 +70,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_4.add(Conv1D(filters=512, kernel_size=4, padding='same', kernel_regularizer=l2(.01)))
 	branch_4.add(Activation('relu'))
 	branch_4.add(MaxPooling1D(pool_size=32))
-	branch_4.add(Dropout(0.95))
+	branch_4.add(Dropout(0.7))
 	branch_4.add(BatchNormalization())
 	branch_4.add(LSTM(512))
 
@@ -80,7 +80,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_5.add(Conv1D(filters=512, kernel_size=5, padding='same', kernel_regularizer=l2(.01)))
 	branch_5.add(Activation('relu'))
 	branch_5.add(MaxPooling1D(pool_size=32))
-	branch_5.add(Dropout(0.95))
+	branch_5.add(Dropout(0.7))
 	branch_5.add(BatchNormalization())
 	branch_5.add(LSTM(512))
 
@@ -90,7 +90,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_6.add(Conv1D(filters=512, kernel_size=6, padding='same', kernel_regularizer=l2(.01)))
 	branch_6.add(Activation('relu'))
 	branch_6.add(MaxPooling1D(pool_size=32))
-	branch_6.add(Dropout(0.95))
+	branch_6.add(Dropout(0.7))
 	branch_6.add(BatchNormalization())
 	branch_6.add(LSTM(512))
 
@@ -100,14 +100,14 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_7.add(Conv1D(filters=512, kernel_size=7, padding='same', kernel_regularizer=l2(.01)))
 	branch_7.add(Activation('relu'))
 	branch_7.add(MaxPooling1D(pool_size=32))
-	branch_7.add(Dropout(0.95))
+	branch_7.add(Dropout(0.7))
 	branch_7.add(BatchNormalization())
 	branch_7.add(LSTM(512))
 
 
 	model = Sequential()
 	model.add(Merge([branch_2,branch_3,branch_4,branch_5,branch_6,branch_7], mode='concat'))
-	model.add(Dropout(0.95))
+	model.add(Dropout(0.7))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
