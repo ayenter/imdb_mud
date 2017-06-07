@@ -6,14 +6,14 @@
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
 import os
-global_model_version = 51
-global_batch_size = 128
+global_model_version = 52
+global_batch_size = 32
 global_top_words = 5000
 global_max_review_length = 500
 global_dir_name = os.path.dirname(os.path.realpath(__file__))
 global_embedding_vecor_length = 32
 
-global_model_description = "conv(3/5/7/9x128)[l2(0.01)] -> relu -> maxpool(2) -> dropout(0.5) -> batchnorm -> lstm(128) -> dropout(0.5) -> merge(concat) -> dense(1)  [ 128 batch size ]"
+global_model_description = "conv(3/5/7/9x128)[l2(0.01)] -> relu -> maxpool(2) -> dropout(0.5) -> batchnorm -> lstm(128) -> dropout(0.5) -> merge(concat) -> dense(1)  [ 32 batch size ]"
 
 
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
@@ -54,7 +54,6 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_3.add(Dropout(0.5))
 	branch_3.add(BatchNormalization())
 	branch_3.add(LSTM(128))
-	branch_3.add(Dropout(0.5))
 
 	# --- 5 ---
 	branch_5 = Sequential()
@@ -65,7 +64,6 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_5.add(Dropout(0.5))
 	branch_5.add(BatchNormalization())
 	branch_5.add(LSTM(128))
-	branch_5.add(Dropout(0.5))
 
 	# --- 7 ---
 	branch_7 = Sequential()
@@ -76,7 +74,6 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_7.add(Dropout(0.5))
 	branch_7.add(BatchNormalization())
 	branch_7.add(LSTM(128))
-	branch_7.add(Dropout(0.5))
 
 	# --- 9 ---
 	branch_9 = Sequential()
@@ -87,7 +84,6 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	branch_9.add(Dropout(0.5))
 	branch_9.add(BatchNormalization())
 	branch_9.add(LSTM(128))
-	branch_9.add(Dropout(0.5))
 
 
 	model = Sequential()
