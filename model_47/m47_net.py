@@ -6,14 +6,14 @@
 # -+-+-+-+-+-+-+- GLOBAL VARIABLES -+-+-+-+-+-+-+-
 
 import os
-global_model_version = 46
+global_model_version = 47
 global_batch_size = 16
 global_top_words = 5000
 global_max_review_length = 500
 global_dir_name = os.path.dirname(os.path.realpath(__file__))
 global_embedding_vecor_length = 32
 
-global_model_description = "conv(2/3/4/5/6/7x512)[l2(0.01)] -> relu -> maxpool(32) -> dropout(0.95) -> batchnorm -> lstm(512) -> merge(concat) -> dense(1)  [ 32 batch size ]"
+global_model_description = "conv(2/3/4/5/6/7x512)[l2(0.01)] -> relu -> maxpool(32) -> dropout(0.95) -> batchnorm -> lstm(512) -> merge(concat) -> dropout(0.95) -> dense(1)  [ 32 batch size ]"
 
 
 # -+-+-+-+-+-+-+- IMPORTS -+-+-+-+-+-+-+-
@@ -107,6 +107,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 
 	model = Sequential()
 	model.add(Merge([branch_2,branch_3,branch_4,branch_5,branch_6,branch_7], mode='concat'))
+	model.add(Dropout(0.95))
 	model.add(Dense(1, activation='sigmoid'))
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
