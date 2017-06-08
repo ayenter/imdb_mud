@@ -89,7 +89,7 @@ def build_model(top_words, embedding_vecor_length, max_review_length, show_summa
 	model = Sequential()
 	model.add(Merge([branch_3,branch_5,branch_7,branch_9], mode='concat'))
 	model.add(Dense(1, activation='sigmoid'))
-	opt = keras.optimizers.RMSprop(lr=0.0001)
+	opt = keras.optimizers.RMSprop(lr=0.00005)
 	model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 
 	if show_summaries:
