@@ -1,0 +1,195 @@
+new talk
+
+bi-directional lstm
+
+
+
+todo:
+	- lstm
+		- bi-directional lstm
+	- cnn
+		- no cnn + 3,4,5 cnn
+		- 6+ cnn
+		- 2 cnn
+	- dense
+		- 2 dense layers
+
+	- dropout
+		- dropout .8
+
+	- learning rate
+		- lower to .001
+	- batch size
+		- lower to 32
+	- batch normalization
+		- add batch normalization
+	- top words
+		- raise top n words to 10,000
+	- max_review_length
+		- 250
+		- 750
+	- train / test split
+		- 80/20 split
+
+
+Heirarchial clustering
+	- word vector quantization
+		- tree with 500 leaves
+look for clustering that keeps sequence
+
+Write the basic for paper:
+	"ieee transaction computer society"
+	6+ pages
+	uemcun webiste a4 template
+
+####################################################################
+
+
+
+
+background - 1pg
+dataset - 1pg
+methodlolgy
+expir
+
+umcon -template
+
+figure comparison table
+confusion matrix
+train/valid curve
+table of parameters to acc
+
+25 references
+
+look at 1st conference paper for formatting references
+
+
+intro last
+
+
+.8 dropout
+batch size 16
+lr .001
+
+
+Sat 06/10 noon - complete write-up
+email sections as you approach
+
+
+schedule
+05/23	background	1.25	dataset		0.5
+05/24	methodology	1.25
+05/25	experiments	1.25
+05/26	references	1
+05/27	intro		1.25
+
+Thesis deadline July 7th
+
+ 8  Wake up
+    Breakfast
+ 9  Shower
+ 	Prepare
+10	Dataset
+	Dataset
+11	Background
+	Background
+12	Background
+	Background
+ 1	Background
+ 	Eat
+ 	Methodology
+ 2	Methodology
+ 	Methodology
+ 3	Methodology
+ 	Methodology
+ 4	Experiments
+ 	Experiments
+ 5	Experiments
+ 	Experiments
+ 6	Experiments
+ 	Results
+ 7	Results
+ 	Results
+ 8	Results
+ 	Results
+ 9	Eat
+ 	Conclusion
+10	Conclusion
+	Conclusion
+11	Conclusion
+
+
+.5  abstr  .25
+.5  intro  .25
+0   datas 0
+3   backg 1.5
+3   methd 1.5
+2   exprm 1
+2   reslt 1
+.5  concl  .25
+
+12.5	  6.25
+
+11.5	  5.75
+
+
+---------------------------------
+
+dont start with a reference
+
+more references
+ - nn such as googlenet, blah, blah, blah have been very successful
+ - use Verma's papers
+ - references of generic text classification
+ - references to explain neural network layers
+ 	- where is lstm popular
+
+Expirements
+ - Hardware
+ - Software
+
+ ms-vizio
+
+Sunday 6:30pm
+
+
+-----------------------------------
+
+base network vs proposed network
+
+remove acknowledgement
+
+results + analysis
+	intro
+		state accuracy
+	accuracy
+	overfitting
+	depth
+	comparisons of models
+	
+
+------------------------------------
+
+--CHANGE--
+darker labels
+
+
+--ADD--
+model name  CNN-LSTM with combined kernels - a deep convolutional neural network with LSTM and combined kernels and multiple losses - deep CNN based LSTM w/ combined kernels and multiple losses
+label axes
+peruasivness in abstract and end of intro
+
+Another paragraph to abstract - follow pattern of received abstract
+caption and titles to figures
+number figures
+copy tables straight into text box
+Choose obviously positive and obviously negative review as examples to compare
+t-sne (last)
+
+reference website tutorial (largerly inspired)
+General Text classification references
+Other articles of usefulness of neworks  (in images and videos) references
+LSTM / RNN references
+
+upload to Titanium
+
